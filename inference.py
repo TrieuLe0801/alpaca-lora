@@ -1,13 +1,13 @@
 import os
 import sys
-from typing import Union, List
-from convert_text_to_list import convert_text_to_list
+from typing import List, Union
 
 import fire
 import torch
 from peft import PeftModel
 from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
 
+from convert_text_to_list import convert_text_to_list
 from utils.prompter import Prompter
 
 if torch.cuda.is_available():
@@ -68,7 +68,6 @@ def main(
     prompt_template: str = "",  # The prompt template to use, will default to alpaca.
     # server_name: str = "0.0.0.0",  # Allows to listen on all interfaces by providing '0.
     # share_gradio: bool = False,
-    
 ):
     base_model = base_model or os.environ.get("BASE_MODEL", "")
     assert (
@@ -115,14 +114,14 @@ def main(
     model.config.pad_token_id = tokenizer.pad_token_id = 0  # unk
     model.config.bos_token_id = 1
     model.config.eos_token_id = 2
-    
+
     if not load_8bit:
         model.half()  # seems to fix bugs for some users.
 
     model.eval()
     if torch.__version__ >= "2" and sys.platform != "win32":
         model = torch.compile(model)
-    
+
     def evaluate(
         instruction,
         input=None,
@@ -143,7 +142,7 @@ def main(
             top_p=top_p,
             top_k=top_k,
             num_beams=num_beams,
-            # repetition_penalty=repetition_penalty, 
+            # repetition_penalty=repetition_penalty,
             do_sample=do_sample,
             # early_stopping=True,
             **kwargs,
@@ -156,7 +155,7 @@ def main(
         #     "output_scores": True,
         #     "max_new_tokens": max_new_tokens,
         # }
-        
+
         # Without streaming
         with torch.no_grad():
             generation_output = model.generate(
@@ -168,7 +167,8 @@ def main(
             )
         s = generation_output.sequences[0]
         output = tokenizer.decode(s)
-        return(output)
+        return output
+
     if isinstance(input_text, str):
         output_generation = evaluate(instruction, input_text)
         print(output_generation)
@@ -178,15 +178,16 @@ def main(
             output_text = evaluate(instruction, i)
             print(output_text)
             output_generation.append(output_text)
-            
+
     return output_generation
+
 
 if __name__ == "__main__":
     # fire.Fire(main)
     input_text_list = convert_text_to_list()
     output_list = main(
-        input_text = input_text_list[5],
+        input_text=input_text_list[5],
         load_8bit=True,
         base_model="medalpaca/medalpaca-7b",
-        lora_weights="./lora-alpaca"
+        lora_weights="./lora-alpaca",
     )
