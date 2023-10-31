@@ -11,7 +11,7 @@ from convert_text_to_list import convert_text_to_list
 from utils.prompter import Prompter
 
 if torch.cuda.is_available():
-    device = "cuda:0"
+    device = "cuda"
 else:
     device = "cpu"
 
