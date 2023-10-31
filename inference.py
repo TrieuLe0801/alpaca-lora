@@ -11,7 +11,7 @@ from convert_text_to_list import convert_text_to_list
 from utils.prompter import Prompter
 
 if torch.cuda.is_available():
-    device = "cuda"
+    device = "cuda:0"
 else:
     device = "cpu"
 
@@ -183,11 +183,12 @@ def main(
 
 
 if __name__ == "__main__":
-    # fire.Fire(main)
     input_text_list = convert_text_to_list()
-    output_list = main(
-        input_text=input_text_list[5],
-        load_8bit=True,
-        base_model="medalpaca/medalpaca-7b",
-        lora_weights="./lora-alpaca",
-    )
+    fire.Fire(main)
+    # output_list = main(
+    #     input_text=input_text_list[0],
+    #     # instruction=prompt,
+    #     load_8bit=True,
+    #     base_model="medalpaca/medalpaca-7b",
+    #     lora_weights="./lora-alpaca/checkpoint-1000",
+    # )
