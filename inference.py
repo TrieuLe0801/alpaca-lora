@@ -184,11 +184,11 @@ def main(
 
 if __name__ == "__main__":
     input_text_list = convert_text_to_list()
-    fire.Fire(main)
-    # output_list = main(
-    #     input_text=input_text_list[0],
-    #     # instruction=prompt,
-    #     load_8bit=True,
-    #     base_model="medalpaca/medalpaca-7b",
-    #     lora_weights="./lora-alpaca/checkpoint-1000",
-    # )
+    # fire.Fire(main)
+    output_list = main(
+        input_text=input_text_list[0],
+        # instruction=prompt,
+        load_8bit=True,
+        base_model="medalpaca/medalpaca-7b",
+        lora_weights="/kaggle/input/lora-alpaca-checkpoint/lora-alpaca/checkpoint-1000",
+    )
