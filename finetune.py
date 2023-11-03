@@ -28,8 +28,12 @@ from utils.prompter import Prompter
 def train(
     # model/data params
     base_model: str = "",  # the only required argument
+    # data hyperparameter
     data_path: str = "yahma/alpaca-cleaned",
     output_dir: str = "./lora-alpaca",
+    instruction_key: str = "instruction",
+    input_key: str = "input",
+    output_key: str = "output",
     # training hyperparams
     batch_size: int = 128,
     micro_batch_size: int = 4,
@@ -62,6 +66,9 @@ def train(
             f"Training Alpaca-LoRA model with params:\n"
             f"base_model: {base_model}\n"
             f"data_path: {data_path}\n"
+            f"instruction_key: {instruction_key}\n"
+            f"input_key: {input_key}\n"
+            f"output_key: {output_key}\n"
             f"output_dir: {output_dir}\n"
             f"batch_size: {batch_size}\n"
             f"micro_batch_size: {micro_batch_size}\n"
@@ -147,14 +154,14 @@ def train(
 
     def generate_and_tokenize_prompt(data_point):
         full_prompt = prompter.generate_prompt(
-            data_point["instruction"],
-            data_point["input"],
-            data_point["output"],
+            data_point[instruction_key],
+            data_point[input_key],
+            data_point[output_key],
         )
         tokenized_full_prompt = tokenize(full_prompt)
         if not train_on_inputs:
             user_prompt = prompter.generate_prompt(
-                data_point["instruction"], data_point["input"]
+                data_point[instruction_key], data_point[input_key]
             )
             tokenized_user_prompt = tokenize(
                 user_prompt, add_eos_token=add_eos_token
