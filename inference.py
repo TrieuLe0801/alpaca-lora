@@ -183,12 +183,12 @@ def main(
 
 
 if __name__ == "__main__":
-    input_text_list = convert_text_to_list()
-    # fire.Fire(main)
-    output_list = main(
-        input_text=input_text_list[0],
-        instruction="Given a medical context and a multiple choice question related to it, select the correct answers from the four options. The answer is binary string with length is the number of opitons, 1 is correct and 0 is incorrect",
-        load_8bit=True,
-        base_model="medalpaca/medalpaca-7b",
-        lora_weights="./lora-alpaca/checkpoint-800",
-    )
+    # input_text_list = convert_text_to_list()
+    fire.Fire(main)
+    # output_list = main(
+    #     input_text=input_text_list[0],
+    #     instruction="Given a medical context and a multiple choice question related to it, select the correct answers from the four options. The answer is binary string with length is the number of opitons, 1 is correct and 0 is incorrect",
+    #     load_8bit=True,
+    #     base_model="medalpaca/medalpaca-7b",
+    #     lora_weights="./lora-alpaca/checkpoint-800",
+    # )
