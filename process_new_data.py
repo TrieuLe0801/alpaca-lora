@@ -1,5 +1,4 @@
-import os
-import sys
+import json
 
 import pandas as pd
 from datasets import load_dataset
@@ -75,6 +74,7 @@ def transform_dataset(
         answer_col, b_answer = answer_mapping.get(cop, ("opd", "0001"))
         answer = row[answer_col]
         answers_list.append(answer)
+        print(b_answer)
         b_answers_list.append(b_answer)
 
     # Create new columns
@@ -91,30 +91,25 @@ def transform_dataset(
     else:
         raise "Invalid path of file!"
 
-
+# def prepare_dataset():
+#     train_dataset = load_dataset("json", data_files="data/medmcqa_data_train.json")["train"]
+#     test_dataset = load_dataset("json", data_files="data/medmcqa_data_test.json")["train"]
+#     valid_dataset = load_dataset("json", data_files="data/medmcqa_data_valid.json")["train"]
+#     print(test_dataset)
+#     data_dict = {}
+#     data_dict.update({"train": train_dataset, "test": test_dataset, "validation": valid_dataset})
+    
+#     with open("data/medmcqa_data.json", "w") as outfile: 
+#         json.dump(dict(data_dict), outfile)
+    
 if __name__ == "__main__":
     instruction = """
-        In this case, you are a genius doctor, based on your medical knowledge, let help me complete the exam correctly. What I want you do that read the Vietnamese question (multi-choice) and answer me in binary string where 1 is the choice you want me pick. Only give the answer, not contain any explaining.
-        Here are some examples that may help you understand how to solve my question:
-        Question: What are the symptoms of heart valve disease?
-        A. Difficulty breathing
-        B. Rapid weight gain
-        C. Jaundice
-        D. Hair loss
-        Answer:
-        1100
-
-        Question: Last August, An and Binh went for a health check-up. An was diagnosed with grade 3 myopia, Binh was diagnosed with fatty liver. How can Binh limit and reduce his illness?
-        A. Increase alcohol consumption
-        B. Eat a lot of foods containing cholesterol
-        C. Lose weight, exercise regularly and maintain a healthy diet
-        D. Smoking
-        Answer:
-        0010
+       Given a medical context and a multiple choice question related to it, select the correct answers from the four options. The answer is binary string with length is the number of opitons, 1 is correct and 0 is incorrect
     """
     transform_dataset(
         data_path_or_name="medmcqa",
         dataset_key="train",
         instruction=instruction,
-        output_path="data/medmcqa_data_valid.json",
+        output_path="data/medmcqa_data_train.json",
     )
+    # prepare_dataset()
