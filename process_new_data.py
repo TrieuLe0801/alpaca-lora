@@ -59,22 +59,22 @@ def transform_dataset(
     b_answers_list = []
 
     for _, row in tqdm(data_df.iterrows()):
-        question = row["question"]
-        options = "\n".join(
+        question = f'Q: {row["question"]}'
+        options = "".join(
             [
-                f'A. {row["opa"]}',
-                f'B. {row["opb"]}',
-                f'C. {row["opc"]}',
-                f'D. {row["opd"]}',
+                f"""'A': '{row["opa"]}'""",
+                f""",'B': '{row["opb"]}'""",
+                f""",'C': '{row["opc"]}'""",
+                f""",'D': '{row["opd"]}'""",
             ]
         )
-        inputs_list.append(f"{question}\n{options}")
+        inputs_list.append(question+"{"+options+"}")
 
         cop = row["cop"]
         answer_col, b_answer = answer_mapping.get(cop, ("opd", "0001"))
         answer = row[answer_col]
         answers_list.append(answer)
-        print(b_answer)
+        # print(b_answer)
         b_answers_list.append(b_answer)
 
     # Create new columns
@@ -104,7 +104,7 @@ def transform_dataset(
     
 if __name__ == "__main__":
     instruction = """
-       Given a medical context and a multiple choice question related to it, select the correct answers from the four options. The answer is binary string with length is the number of opitons, 1 is correct and 0 is incorrect
+       "Please answer the letters of options truthfully in the bracket, there maybe more than one correct answers
     """
     transform_dataset(
         data_path_or_name="medmcqa",
