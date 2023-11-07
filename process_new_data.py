@@ -103,9 +103,7 @@ def transform_dataset(
 #         json.dump(dict(data_dict), outfile)
     
 if __name__ == "__main__":
-    instruction = """
-       "Please answer the letters of options truthfully in the bracket, there maybe more than one correct answers
-    """
+    instruction = "Please answer the letters of options truthfully in the bracket, there maybe more than one correct answers"
     transform_dataset(
         data_path_or_name="medmcqa",
         dataset_key="train",
